@@ -1,4 +1,24 @@
+const { ObjectId } = require('mongoose').Types;
 const Post = require('models/post');
+
+
+
+// objectId 검증
+exports.checkObjectId = (ctx, next) => {
+    const { id } = ctx.params;
+    
+    // 검증 실패: 없는 ID로 요청이 들어오면 400 error 반환
+    // ID가 자릿수가 맞지 않을 때 발생
+    // 자릿수는 맞는데 없는 ID면 bad request 발생
+    if(!ObjectId.isValid(id)) {
+        console.log('fail');
+        ctx.status = 400;
+        return null;
+    }
+
+    // next를 리턴해야 ctx.body가 제대로 설정됨
+    return next();
+};
 
 
 // POST /api/postMessage
